@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Here you can add entries for jobs. Each entry must have a unique name (e.g., one, two) and can contain any attributes defined in the Job model.
+
+one:
+  title: MyString
+  description: MyText
+  location: MyString
+  category: MyString
+  budget: 1
+
+two:
+  title: MyString
+  description: MyText
+  location: MyString
+  category: MyString
+  budget: 1
