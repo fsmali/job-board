@@ -4,6 +4,10 @@
 # - location: a string that indicates where the job is located.
 # - category: a string that categorizes the job (e.g., "Engineering", "
 class Job < ApplicationRecord
+    belongs_to :user
+    
+    has_many :job_applications
+
     validates :title, presence: true
     validates :description, presence: true
     validates :location, presence: true

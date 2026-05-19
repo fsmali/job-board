@@ -1,4 +1,8 @@
 class JobsController < ApplicationController
+    # Only logged-in users can create, update, or destroy.
+    before_action :authenticate_user!, only: [:create, :update, :destroy]
+      before_action :authorize_owner!, only: [:update, :destroy]
+      before_action :authorize_employer!, only: [:create]
     # handles the case where a job is not found in the database and returns a JSON response with an error message and a status of not found (404).
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
  # jobs controller with an index action that retrieves all jobs from the database and returns them as JSON.
@@ -17,7 +21,7 @@ class JobsController < ApplicationController
  end
  def create
     # creates a new job with the parameters from the request body.
-    job = Job.new(job_params)
+   job = current_user.jobs.new(job_params)
     # if the job is saved successfully, return the job as JSON with a status of created (201).
     if job.save
         render json: job, status: :created
@@ -49,4 +53,16 @@ class JobsController < ApplicationController
     def record_not_found
         render json: { error: "Job not found" }, status: :not_found
     end 
+    def authorize_owner!
+  job = Job.find(params[:id])
+
+  unless job.user_id == current_user.id
+    render json: { error: "Forbidden" }, status: :forbidden
+  end
+end
+def authorize_employer!
+  unless current_user.role == "employer"
+    render json: { error: "Only employers can create jobs" }, status: :forbidden
+  end
+end
 end
