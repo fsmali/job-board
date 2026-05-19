@@ -8,6 +8,14 @@ class UsersController < ApplicationController
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
   end
+  
+  def me
+  if current_user
+    render json: current_user
+  else
+    render json: { error: "Unauthorized" }, status: :unauthorized
+  end
+end
 
   private
 

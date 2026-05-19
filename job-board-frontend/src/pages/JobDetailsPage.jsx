@@ -9,8 +9,7 @@ function JobDetailsPage() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const { token } = useAuth();
+  const { user, token } = useAuth();
 
   const {
     data: job,
@@ -25,11 +24,16 @@ function JobDetailsPage() {
   });
   const deleteJobMutation = useMutation({
     mutationFn: async () => {
-      await axios.delete(`http://localhost:3000/jobs/${id}`);
+      await axios.delete(`http://localhost:3000/jobs/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
-      navigate('/');
+      queryClient.invalidateQueries({ queryKey: ['my-jobs'] });
+      navigate('/my-jobs');
     },
   });
   const applyMutation = useMutation({
@@ -61,7 +65,6 @@ function JobDetailsPage() {
 
   return (
     <>
-      ≈
       <div>
         <Link to="/">Back to jobs</Link>
         <h1>{job.title}</h1>
@@ -69,36 +72,46 @@ function JobDetailsPage() {
         <p>{job.location}</p>
         <p>{job.category}</p>
         <p>£{job.budget}</p>
-        <Link to={`/jobs/${job.id}/edit`}>
-          <button>Edit Job</button>
-        </Link>
-        <button onClick={() => deleteJobMutation.mutate()}>Delete Job</button>
+
+        {user?.role === 'employer' && user?.id === job.user_id && (
+          <>
+            <Link to={`/jobs/${job.id}/edit`}>
+              <button>Edit Job</button>
+            </Link>
+
+            <button onClick={() => deleteJobMutation.mutate()}>
+              Delete Job
+            </button>
+          </>
+        )}
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          applyMutation.mutate();
-        }}
-      >
-        <h2>Apply this job</h2>
-        <textarea
-          placeholder=" write a short message about yourself"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        ></textarea>
-        <div>
-          <button type="submit" disabled={applyMutation.isPending}>
-            {applyMutation.isPending ? 'Applying' : 'Apply'}
-          </button>
-          {applyMutation.isError && (
-            <p>
-              {applyMutation.error.data?.error ||
-                applyMutation.error.data?.errors?.[0] ||
-                'You have already applied this job'}
-            </p>
-          )}
-        </div>
-      </form>
+      {user?.role === 'freelancer' && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            applyMutation.mutate();
+          }}
+        >
+          <h2>Apply this job</h2>
+          <textarea
+            placeholder=" write a short message about yourself"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          ></textarea>
+          <div>
+            <button type="submit" disabled={applyMutation.isPending}>
+              {applyMutation.isPending ? 'Applying' : 'Apply'}
+            </button>
+            {applyMutation.isError && (
+              <p>
+                {applyMutation.error.data?.error ||
+                  applyMutation.error.data?.errors?.[0] ||
+                  'You have already applied this job'}
+              </p>
+            )}
+          </div>
+        </form>
+      )}
     </>
   );
 }

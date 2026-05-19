@@ -1,6 +1,6 @@
 class JobsController < ApplicationController
     # Only logged-in users can create, update, or destroy.
-    before_action :authenticate_user!, only: [:create, :update, :destroy]
+    before_action :authenticate_user!, only: [:create, :update, :destroy, :my_jobs]
       before_action :authorize_owner!, only: [:update, :destroy]
       before_action :authorize_employer!, only: [:create]
     # handles the case where a job is not found in the database and returns a JSON response with an error message and a status of not found (404).
@@ -45,6 +45,10 @@ class JobsController < ApplicationController
     job.destroy
     head :no_content
  end
+def my_jobs
+  render json: current_user.jobs
+end
+
     private
     # strong parameters to allow only the specified parameters to be used for creating a job.
     def job_params

@@ -7,6 +7,8 @@ get "/health", to: "health#index"
 post "/signup", to: "users#create"
 post "/login", to: "sessions#create"
 get "/my-applications", to: "job_applications#my_applications"
+get "/me", to: "users#me"
+get "/my-jobs", to: "jobs#my_jobs"
 
  resources :job_applications, only: [:update]
   # creates REST routes for jobs.
