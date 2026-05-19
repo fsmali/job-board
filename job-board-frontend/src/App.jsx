@@ -4,6 +4,7 @@ import JobDetailsPage from './pages/JobDetailsPage';
 import CreateJobPage from './pages/CreateJobPage';
 import EditJobPage from './pages/EditJobPage';
 import LoginPage from './pages/LoginPage';
+import MyApplicationPage from './pages/MyApplicationPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route path="/create-job" element={<CreateJobPage />} />
       <Route path="/jobs/:id/edit" element={<EditJobPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/my-applications" element={<MyApplicationPage />} />
     </Routes>
   );
 }

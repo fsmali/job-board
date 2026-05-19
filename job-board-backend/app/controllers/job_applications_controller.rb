@@ -35,7 +35,7 @@ class JobApplicationsController < ApplicationController
 end
 
 def my_applications
-  render json: current_user.job_applications
+  render json: current_user.job_applications,include: :job
 end
     def update
   job_application = JobApplication.find(params[:id])
