@@ -58,7 +58,7 @@ function JobApplicantsPage() {
   return (
     <div>
       <h1>Job Applicants</h1>
-
+      {applications.length === 0 && <p>There is no applicant found</p>}
       {applications.map((application) => (
         <div key={application.id}>
           <p>{application.message}</p>

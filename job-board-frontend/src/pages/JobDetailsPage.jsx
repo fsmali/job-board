@@ -84,6 +84,7 @@ function JobDetailsPage() {
 
   return (
     <>
+      {job.length === 0 && <p>No jobs found for this search.</p>}
       <div>
         <Link to="/">Back to jobs</Link>
         <h1>{job.title}</h1>
@@ -112,11 +113,21 @@ function JobDetailsPage() {
             applyMutation.mutate();
           }}
         >
-          <h2>Apply this job</h2>
+          <h2
+            style={{
+              display:
+                applyMutation.isPending || alreadyApplied ? 'none' : 'block',
+            }}
+          >
+            Apply this job
+          </h2>
           <textarea
             placeholder=" write a short message about yourself"
             value={message}
-            disabled={applyMutation.isPending || alreadyApplied}
+            style={{
+              display:
+                applyMutation.isPending || alreadyApplied ? 'none' : 'block',
+            }}
             onChange={(e) => setMessage(e.target.value)}
           ></textarea>
           <div>

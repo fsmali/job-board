@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import JobCard from '../components/JobCard';
 
 function HomePage() {
   const { user, token } = useAuth();
@@ -124,17 +125,12 @@ function HomePage() {
         );
 
         return (
-          <div key={job.id}>
-            <h2>{job.title}</h2>
-            <p>{job.location}</p>
-            <p>£{job.budget}</p>
-
-            {user?.role === 'freelancer' && alreadyApplied && (
-              <p>Already applied</p>
-            )}
-
-            <Link to={`/jobs/${job.id}`}>View details</Link>
-          </div>
+          <JobCard
+            key={job.id}
+            job={job}
+            user={user}
+            alreadyApplied={alreadyApplied}
+          />
         );
       })}
     </div>

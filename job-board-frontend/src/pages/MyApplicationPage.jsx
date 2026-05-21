@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const MyApplicationPage = () => {
   const { token } = useAuth();
@@ -30,6 +31,14 @@ const MyApplicationPage = () => {
 
   return (
     <div>
+      {applications.length === 0 && (
+        <p>
+          You have not applied to any jobs yet.{' '}
+          <Link to={'/'}>
+            <p>apply a job</p>
+          </Link>
+        </p>
+      )}
       {applications.map((application) => (
         <div key={application.id}>
           <h2>{application.job.title}</h2>

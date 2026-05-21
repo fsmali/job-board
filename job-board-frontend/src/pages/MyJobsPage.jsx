@@ -29,19 +29,21 @@ function MyJobsPage() {
   return (
     <div>
       <h1>My Jobs</h1>
-      {jobs.length === 0
-        ? 'there are no job to shows'
-        : jobs.map((job) => (
-            <div key={job.id}>
-              <h2>{job.title}</h2>
-              <p>{job.location}</p>
-              <p>£{job.budget}</p>
+      {jobs.length === 0 ? (
+        <Link to="/create-job">Create your first job</Link>
+      ) : (
+        jobs.map((job) => (
+          <div key={job.id}>
+            <h2>{job.title}</h2>
+            <p>{job.location}</p>
+            <p>£{job.budget}</p>
 
-              <Link to={`/jobs/${job.id}`}>View</Link>
+            <Link to={`/jobs/${job.id}`}>View</Link>
 
-              <Link to={`/jobs/${job.id}/applicants`}>Applicants</Link>
-            </div>
-          ))}
+            <Link to={`/jobs/${job.id}/applicants`}>Applicants</Link>
+          </div>
+        ))
+      )}
     </div>
   );
 }
