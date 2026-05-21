@@ -6,6 +6,18 @@ import { Link } from 'react-router-dom';
 const MyApplicationPage = () => {
   const { token } = useAuth();
 
+  // protects the Create Job page on the frontend.
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    if (user && user.role !== 'freelancer') {
+      navigate('/');
+    }
+  }, [token, user, navigate]);
+
   const {
     data: applications,
     isLoading,

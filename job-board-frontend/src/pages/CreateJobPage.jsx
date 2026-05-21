@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function CreateJobPage() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -15,6 +15,16 @@ function CreateJobPage() {
     category: '',
     budget: '',
   });
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    if (user && user.role !== 'employer') {
+      navigate('/');
+    }
+  }, [token, user, navigate]);
 
   const createJobMutation = useMutation({
     mutationFn: async (newJob) => {

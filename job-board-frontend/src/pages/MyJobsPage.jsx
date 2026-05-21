@@ -6,6 +6,18 @@ import { useAuth } from '../context/AuthContext';
 function MyJobsPage() {
   const { token } = useAuth();
 
+  // protects the my job page on the frontend.
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    if (user && user.role !== 'employer') {
+      navigate('/');
+    }
+  }, [token, user, navigate]);
+
   const {
     data: jobs,
     isLoading,

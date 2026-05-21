@@ -8,6 +8,18 @@ function JobApplicantsPage() {
   const { token } = useAuth();
   const queryClient = useQueryClient();
 
+  // protects the Create Job page on the frontend.
+  useEffect(() => {
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    if (user && user.role !== 'employer') {
+      navigate('/');
+    }
+  }, [token, user, navigate]);
+
   const {
     data: applications,
     isLoading,

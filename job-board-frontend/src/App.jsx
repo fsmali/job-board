@@ -9,6 +9,7 @@ import JobApplicantsPage from './pages/JobApplicantsPage';
 import Navbar from './components/Navbar';
 import MyJobsPage from './pages/MyJobsPage';
 import SignupPage from './pages/SignupPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/jobs/:id/applicants" element={<JobApplicantsPage />} />
         <Route path="/my-jobs" element={<MyJobsPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
   );
