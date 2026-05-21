@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -70,6 +71,9 @@ function LoginPage() {
         </div>
 
         <button type="submit">Login</button>
+        <p>
+          Don&apos;t have an account? <Link to="/signup">Signup</Link>
+        </p>
       </form>
     </div>
   );

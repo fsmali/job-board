@@ -59,19 +59,38 @@ function JobDetailsPage() {
       navigate('/');
     },
   });
+  const { data: myApplications = [] } = useQuery({
+    queryKey: ['my-applications'],
+    queryFn: async () => {
+      const { data } = await axios.get(
+        'http://localhost:3000/my-applications',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      return data;
+    },
+    enabled: !!token && user?.role === 'freelancer',
+  });
 
   if (isLoading) return <h1>Loading job...</h1>;
   if (isError) return <h1>Job not found</h1>;
+  const alreadyApplied = myApplications.some(
+    (application) => application.job_id === Number(id),
+  );
 
   return (
     <>
       <div>
         <Link to="/">Back to jobs</Link>
         <h1>{job.title}</h1>
-        <p>{job.description}</p>
         <p>{job.location}</p>
         <p>{job.category}</p>
         <p>£{job.budget}</p>
+        <p>{job.description}</p>
 
         {user?.role === 'employer' && user?.id === job.user_id && (
           <>
@@ -89,6 +108,7 @@ function JobDetailsPage() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            if (alreadyApplied) return;
             applyMutation.mutate();
           }}
         >
@@ -96,16 +116,24 @@ function JobDetailsPage() {
           <textarea
             placeholder=" write a short message about yourself"
             value={message}
+            disabled={applyMutation.isPending || alreadyApplied}
             onChange={(e) => setMessage(e.target.value)}
           ></textarea>
           <div>
-            <button type="submit" disabled={applyMutation.isPending}>
-              {applyMutation.isPending ? 'Applying' : 'Apply'}
+            <button
+              type="submit"
+              disabled={applyMutation.isPending || alreadyApplied}
+            >
+              {alreadyApplied
+                ? 'Already applied'
+                : applyMutation.isPending
+                  ? 'Applying'
+                  : 'Apply'}
             </button>
             {applyMutation.isError && (
               <p>
-                {applyMutation.error.data?.error ||
-                  applyMutation.error.data?.errors?.[0] ||
+                {applyMutation.error.response?.data?.error ||
+                  applyMutation.error.response?.data?.errors?.[0] ||
                   'You have already applied this job'}
               </p>
             )}

@@ -6,12 +6,25 @@ class JobsController < ApplicationController
     # handles the case where a job is not found in the database and returns a JSON response with an error message and a status of not found (404).
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
  # jobs controller with an index action that retrieves all jobs from the database and returns them as JSON.
- def index
-    # gets all jobs from the database.
-    jobs = Job.all
-    # returns those jobs as JSON.
-    render json: jobs
- end
+def index
+  jobs = Job.all
+
+  if params[:category].present?
+    jobs = jobs.where(
+      "LOWER(category) LIKE ?",
+      "%#{params[:category].downcase}%"
+    )
+  end
+
+  if params[:location].present?
+    jobs = jobs.where(
+      "LOWER(location) LIKE ?",
+      "%#{params[:location].downcase}%"
+    )
+  end
+
+  render json: jobs
+end
   # creates action for one job
  def show
     # gets the job id from url

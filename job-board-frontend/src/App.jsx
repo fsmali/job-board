@@ -8,6 +8,7 @@ import MyApplicationPage from './pages/MyApplicationPage';
 import JobApplicantsPage from './pages/JobApplicantsPage';
 import Navbar from './components/Navbar';
 import MyJobsPage from './pages/MyJobsPage';
+import SignupPage from './pages/SignupPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/my-applications" element={<MyApplicationPage />} />
         <Route path="/jobs/:id/applicants" element={<JobApplicantsPage />} />
         <Route path="/my-jobs" element={<MyJobsPage />} />
+        <Route path="/signup" element={<SignupPage />} />
       </Routes>
     </>
   );

@@ -20,6 +20,7 @@ const MyApplicationPage = () => {
           },
         },
       );
+      console.log(data);
       return data;
     },
   });
@@ -34,6 +35,8 @@ const MyApplicationPage = () => {
           <h2>{application.job.title}</h2>
           <p>{application.job.location}</p>
           <p>{application.job.category}</p>
+          <p>£{application.job.budget}</p>
+          <p>{application.job.description}</p>
           <p>Status: {application.status}</p>
         </div>
       ))}

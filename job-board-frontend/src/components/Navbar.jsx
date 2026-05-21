@@ -13,8 +13,6 @@ function Navbar() {
   };
   return (
     <nav>
-      <h2>Job Board</h2>
-
       <Link to="/">Home</Link>
 
       {token && user?.role === 'employer' && (
@@ -27,6 +25,7 @@ function Navbar() {
       {token && user?.role === 'employer' && <Link to="/my-jobs">My Jobs</Link>}
 
       {!token && <Link to="/login">Login</Link>}
+      {!token && <Link to="/signup">Signup</Link>}
       {token && <button onClick={handleLogout}>Logout</button>}
     </nav>
   );
