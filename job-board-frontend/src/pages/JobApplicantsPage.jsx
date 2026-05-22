@@ -1,12 +1,14 @@
 import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useEffect } from 'react';
 
 function JobApplicantsPage() {
   const { id } = useParams();
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   // protects the Create Job page on the frontend.
   useEffect(() => {
@@ -70,7 +72,12 @@ function JobApplicantsPage() {
   return (
     <div>
       <h1>Job Applicants</h1>
-      {applications.length === 0 && <p>There is no applicant found</p>}
+      {applications.length === 0 && (
+        <p>
+          There is no applicant found{' '}
+          <Link to={'/my-jobs'}>Back To My Jobs</Link>
+        </p>
+      )}
       {applications.map((application) => (
         <div key={application.id}>
           <p>{application.message}</p>

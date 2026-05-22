@@ -1,19 +1,34 @@
 import { Link } from 'react-router-dom';
+import styles from './JobCard.module.css';
 
 const JobCard = ({ user, job, alreadyApplied = false }) => {
   return (
-    <div key={job.id}>
-      <h2>{job.title}</h2>
-      <p>{job.location}</p>
-      <p>£{job.budget}</p>
-      <p>{job.description.slice(0, 100)} ...</p>
-      {user?.role === 'freelancer' && alreadyApplied && <p>Already applied</p>}
-      {user ? (
-        <Link to={`/jobs/${job.id}`}>View details</Link>
-      ) : (
-        <Link to="/login">Login to view details and apply</Link>
+    <article className={styles.card}>
+      <div className={styles.top}>
+        <h2>{job.title}</h2>
+
+        <span className={styles.budget}>£{job.budget}</span>
+      </div>
+
+      <p className={styles.location}>{job.location}</p>
+
+      <p className={styles.description}>{job.description.slice(0, 100)}...</p>
+
+      {user?.role === 'freelancer' && alreadyApplied && (
+        <p className={styles.applied}>Already applied</p>
       )}
-    </div>
+
+      {user ? (
+        <Link className={styles.link} to={`/jobs/${job.id}`}>
+          View details
+        </Link>
+      ) : (
+        <Link className={styles.link} to="/login">
+          Login to apply
+        </Link>
+      )}
+    </article>
   );
 };
+
 export default JobCard;

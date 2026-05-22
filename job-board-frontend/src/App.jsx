@@ -14,19 +14,21 @@ import NotFoundPage from './pages/NotFoundPage';
 function App() {
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/jobs/:id" element={<JobDetailsPage />} />
-        <Route path="/create-job" element={<CreateJobPage />} />
-        <Route path="/jobs/:id/edit" element={<EditJobPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/my-applications" element={<MyApplicationPage />} />
-        <Route path="/jobs/:id/applicants" element={<JobApplicantsPage />} />
-        <Route path="/my-jobs" element={<MyJobsPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <div className="app">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/jobs/:id" element={<JobDetailsPage />} />
+          <Route path="/create-job" element={<CreateJobPage />} />
+          <Route path="/jobs/:id/edit" element={<EditJobPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/my-applications" element={<MyApplicationPage />} />
+          <Route path="/jobs/:id/applicants" element={<JobApplicantsPage />} />
+          <Route path="/my-jobs" element={<MyJobsPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </div>
     </>
   );
 }

@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import AuthBackground from '../components/AuthBackground';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
   const navigate = useNavigate();
   const { setToken, setUser } = useAuth();
+
   const loginMutation = useMutation({
     mutationFn: async (loginData) => {
       const { data } = await axios.post(
@@ -26,7 +28,6 @@ function LoginPage() {
       localStorage.setItem('token', data.token);
       setToken(data.token);
       setUser(data.user);
-
       navigate('/');
     },
   });
@@ -40,42 +41,63 @@ function LoginPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log(formData);
     loginMutation.mutate(formData);
   };
 
   return (
-    <div>
-      <h1>Login</h1>
+    <main className="auth-page" aria-labelledby="login-title">
+      <AuthBackground type="login" />
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
+      <section className="auth-card" aria-describedby="login-description">
+        <h1 id="login-title">Login</h1>
 
-        <div>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
+        {loginMutation.isError && (
+          <div role="alert" aria-live="assertive">
+            Login failed. Please check your email and password.
+          </div>
+        )}
 
-        <button type="submit">Login</button>
-        <p>
-          Don&apos;t have an account? <Link to="/signup">Signup</Link>
-        </p>
-      </form>
-    </div>
+        <form onSubmit={handleSubmit} noValidate>
+          <div>
+            <label htmlFor="email">Email address</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              autoComplete="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              aria-required="true"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              autoComplete="current-password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              aria-required="true"
+            />
+          </div>
+
+          <button type="submit" disabled={loginMutation.isPending}>
+            {loginMutation.isPending ? 'Logging in...' : 'Login'}
+          </button>
+
+          <p>
+            Don&apos;t have an account? <Link to="/signup">Sign up</Link>
+          </p>
+        </form>
+      </section>
+    </main>
   );
 }
 

@@ -86,7 +86,7 @@ function JobDetailsPage() {
     <>
       {job.length === 0 && <p>No jobs found for this search.</p>}
       <div>
-        <Link to="/">Back to jobs</Link>
+        <Link to={'/my-jobs'}>Back To My Jobs</Link>
         <h1>{job.title}</h1>
         <p>{job.location}</p>
         <p>{job.category}</p>

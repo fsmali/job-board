@@ -1,10 +1,15 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useEffect } from 'react';
+import StarsBackground from '../components/StarsBackground';
+import '../styles/myJobs.css';
 
 function MyJobsPage() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
+
+  const navigate = useNavigate();
 
   // protects the my job page on the frontend.
   useEffect(() => {
@@ -19,7 +24,7 @@ function MyJobsPage() {
   }, [token, user, navigate]);
 
   const {
-    data: jobs,
+    data: jobs = [],
     isLoading,
     isError,
   } = useQuery({
@@ -30,33 +35,75 @@ function MyJobsPage() {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(data.length);
+
       return data;
     },
   });
 
-  if (isLoading) return <h1>Loading my jobs...</h1>;
-  if (isError) return <h1>Could not load my jobs</h1>;
+  if (isLoading) {
+    return (
+      <main className="my-jobs-page" aria-busy="true">
+        <StarsBackground />
+
+        <h1 role="status" aria-live="polite">
+          Loading my jobs...
+        </h1>
+      </main>
+    );
+  }
+
+  if (isError) {
+    return (
+      <main className="my-jobs-page">
+        <StarsBackground />
+
+        <h1 role="alert">Could not load my jobs</h1>
+      </main>
+    );
+  }
 
   return (
-    <div>
-      <h1>My Jobs</h1>
-      {jobs.length === 0 ? (
-        <Link to="/create-job">Create your first job</Link>
-      ) : (
-        jobs.map((job) => (
-          <div key={job.id}>
-            <h2>{job.title}</h2>
-            <p>{job.location}</p>
-            <p>£{job.budget}</p>
+    <main className="my-jobs-page" aria-labelledby="my-jobs-title">
+      <StarsBackground />
 
-            <Link to={`/jobs/${job.id}`}>View</Link>
+      <div className="my-jobs-content">
+        <section className="my-jobs-hero">
+          <h1 id="my-jobs-title">My Jobs</h1>
+        </section>
 
-            <Link to={`/jobs/${job.id}/applicants`}>Applicants</Link>
-          </div>
-        ))
-      )}
-    </div>
+        {jobs.length === 0 ? (
+          <p className="empty-message">
+            You have not created any jobs yet.{' '}
+            <Link to="/create-job">Create your first job</Link>
+          </p>
+        ) : (
+          <section className="my-jobs-list" aria-label="Jobs you created">
+            {jobs.map((job) => (
+              <article className="my-job-item" key={job.id}>
+                <h2>{job.title}</h2>
+
+                <p>
+                  <strong>Location:</strong> {job.location}
+                </p>
+
+                <p>
+                  <strong>Budget:</strong> £{job.budget}
+                </p>
+
+                <div
+                  className="my-job-actions"
+                  aria-label={`Actions for ${job.title}`}
+                >
+                  <Link to={`/jobs/${job.id}`}>View</Link>
+
+                  <Link to={`/jobs/${job.id}/applicants`}>Applicants</Link>
+                </div>
+              </article>
+            ))}
+          </section>
+        )}
+      </div>
+    </main>
   );
 }
 

@@ -2,9 +2,12 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const MyApplicationPage = () => {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
+  const navigate = useNavigate();
 
   // protects the Create Job page on the frontend.
   useEffect(() => {
@@ -33,7 +36,7 @@ const MyApplicationPage = () => {
           },
         },
       );
-      console.log(data);
+
       return data;
     },
   });

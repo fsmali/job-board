@@ -1,0 +1,76 @@
+.my-jobs-page {
+  position: relative;
+  min-height: calc(100vh - 107px);
+  padding: 24px 16px;
+  overflow: hidden;
+  background: #050816;
+}
+
+.my-jobs-content {
+  position: relative;
+  z-index: 1;
+}
+
+.my-jobs-hero {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.my-jobs-hero h1 {
+  color: white;
+  font-size: 32px;
+}
+
+.my-jobs-list {
+  display: grid;
+  gap: 16px;
+}
+
+.my-job-item {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.my-job-item h2 {
+  font-size: 22px;
+}
+
+.my-job-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.my-job-actions a {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.my-job-actions a:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .my-jobs-page {
+    padding: 40px;
+    min-height: calc(100vh - 70px);
+  }
+
+  .my-jobs-hero h1 {
+    font-size: 40px;
+  }
+
+  .my-jobs-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .my-jobs-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
