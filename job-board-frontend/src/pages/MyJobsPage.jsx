@@ -61,12 +61,16 @@ function MyJobsPage() {
       </main>
     );
   }
+  const isOwner = user?.role === 'employer' && user?.id === jobs.user_id;
 
   return (
     <main className="my-jobs-page" aria-labelledby="my-jobs-title">
       <StarsBackground />
 
       <div className="my-jobs-content">
+        <Link className="back-link" to={'/ '}>
+          ← Back
+        </Link>
         <section className="my-jobs-hero">
           <h1 id="my-jobs-title">My Jobs</h1>
         </section>
@@ -94,7 +98,16 @@ function MyJobsPage() {
                   className="my-job-actions"
                   aria-label={`Actions for ${job.title}`}
                 >
-                  <Link to={`/jobs/${job.id}`}>View</Link>
+                  <p>
+                    <strong>
+                      {job.applications_count > 0
+                        ? `${job.applications_count} applicant${
+                            job.applications_count === 1 ? '' : 's'
+                          }`
+                        : 'No applicants yet'}
+                    </strong>
+                  </p>
+                  <Link to={`/jobs/${job.id}`}>Edit/Delete</Link>
 
                   <Link to={`/jobs/${job.id}/applicants`}>Applicants</Link>
                 </div>

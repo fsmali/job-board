@@ -6,8 +6,6 @@ const JobCard = ({ user, job, alreadyApplied = false }) => {
     <article className={styles.card}>
       <div className={styles.top}>
         <h2>{job.title}</h2>
-
-        <span className={styles.budget}>£{job.budget}</span>
       </div>
 
       <p className={styles.location}>{job.location}</p>

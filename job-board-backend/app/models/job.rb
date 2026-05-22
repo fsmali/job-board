@@ -7,6 +7,9 @@ class Job < ApplicationRecord
     belongs_to :user
     
     has_many :job_applications, dependent: :destroy
+     def applications_count
+    job_applications.count
+  end
 
     validates :title, presence: true
     validates :description, presence: true

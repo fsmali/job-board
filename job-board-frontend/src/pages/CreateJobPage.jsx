@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/createJob.css';
 import StarsBackground from '../components/StarsBackground';
+import { toast } from 'react-toastify';
 
 function CreateJobPage() {
   const { token, user } = useAuth();
@@ -49,6 +50,10 @@ function CreateJobPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
 
+      toast.success('Job created successfully', {
+        autoClose: 1000,
+      });
+
       setFormData({
         title: '',
         description: '',
@@ -57,7 +62,12 @@ function CreateJobPage() {
         budget: '',
       });
 
-      navigate('/');
+      setTimeout(() => {
+        navigate('/');
+      }, 1000);
+    },
+    onError: () => {
+      toast.error('Could not create job');
     },
   });
 
@@ -70,7 +80,68 @@ function CreateJobPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createJobMutation.mutate(formData);
+
+    if (
+      !formData.title.trim() ||
+      !formData.description.trim() ||
+      !formData.location.trim() ||
+      !formData.category.trim() ||
+      !formData.budget
+    ) {
+      toast.warning('Please fill out all fields');
+      return;
+    }
+
+    if (toast.isActive('create-job-confirm')) return;
+
+    toast.info(
+      <div>
+        <p style={{ marginBottom: '12px' }}>Create this job posting?</p>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: '10px',
+          }}
+        >
+          <button
+            onClick={() => {
+              createJobMutation.mutate(formData);
+              toast.dismiss('create-job-confirm');
+            }}
+            style={{
+              padding: '8px 12px',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              background: '#4f46e5',
+              color: 'white',
+            }}
+          >
+            Create
+          </button>
+
+          <button
+            onClick={() => toast.dismiss('create-job-confirm')}
+            style={{
+              padding: '8px 12px',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              background: '#374151',
+              color: 'white',
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>,
+      {
+        toastId: 'create-job-confirm',
+        autoClose: false,
+        closeOnClick: false,
+      },
+    );
   };
 
   return (
@@ -154,11 +225,11 @@ function CreateJobPage() {
             {createJobMutation.isPending ? 'Creating...' : 'Create Job'}
           </button>
 
-          {createJobMutation.isError && (
+          {/* {createJobMutation.isError && (
             <p role="alert" aria-live="assertive" className="form-error">
               Could not create job. Please check the form.
             </p>
-          )}
+          )} */}
         </form>
       </section>
     </main>

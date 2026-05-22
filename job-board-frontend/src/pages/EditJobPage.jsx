@@ -1,14 +1,18 @@
 import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import StarsBackground from '../components/StarsBackground';
+import '../styles/editJob.css';
+import { toast } from 'react-toastify';
 
 function EditJobPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { token } = useAuth();
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -28,6 +32,7 @@ function EditJobPage() {
       return data;
     },
   });
+
   useEffect(() => {
     if (job) {
       setFormData({
@@ -40,12 +45,6 @@ function EditJobPage() {
     }
   }, [job]);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
   const updateJobMutation = useMutation({
     mutationFn: async (updatedJob) => {
       const { data } = await axios.patch(
@@ -62,81 +61,192 @@ function EditJobPage() {
 
       return data;
     },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
       queryClient.invalidateQueries({ queryKey: ['job', id] });
+      queryClient.invalidateQueries({ queryKey: ['my-jobs'] });
 
-      navigate(`/jobs/${id}`);
+      toast.success('Job updated successfully', {
+        autoClose: 1000,
+      });
+
+      setTimeout(() => {
+        navigate(`/jobs/${id}`);
+      }, 1000);
     },
-    onError: (error) => {
-      console.log('update error:', error.data || error.message);
+
+    onError: () => {
+      toast.error('Could not update job');
     },
   });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('submitting edit form', formData);
-    updateJobMutation.mutate(formData);
+
+    if (
+      !formData.title.trim() ||
+      !formData.description.trim() ||
+      !formData.location.trim() ||
+      !formData.category.trim() ||
+      !formData.budget
+    ) {
+      toast.warning('Please fill out all fields');
+      return;
+    }
+
+    if (toast.isActive('edit-job-confirm')) return;
+
+    toast.info(
+      <div>
+        <p style={{ marginBottom: '12px' }}>Save changes to this job?</p>
+
+        <div
+          style={{
+            display: 'flex',
+            gap: '10px',
+          }}
+        >
+          <button
+            onClick={() => {
+              updateJobMutation.mutate(formData);
+              toast.dismiss('edit-job-confirm');
+            }}
+            style={{
+              padding: '8px 12px',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              background: '#4f46e5',
+              color: 'white',
+            }}
+          >
+            Save
+          </button>
+
+          <button
+            onClick={() => toast.dismiss('edit-job-confirm')}
+            style={{
+              padding: '8px 12px',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              background: '#374151',
+              color: 'white',
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>,
+      {
+        toastId: 'edit-job-confirm',
+        autoClose: false,
+        closeOnClick: false,
+      },
+    );
   };
-  if (isLoading) return <h1>Loading job...</h1>;
-  if (isError) return <h1>Could not load job</h1>;
+
+  if (isLoading) return <h1 className="page-message">Loading job...</h1>;
+  if (isError) return <h1 className="page-message">Could not load job</h1>;
+
   return (
-    <div>
-      <h1>Edit Job</h1>
+    <main className="edit-job-page">
+      <StarsBackground />
 
-      <h2>{job.title}</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="Title"
-          />
-        </div>
+      <div className="edit-job-content">
+        <Link className="back-link" to={`/jobs/${id}`}>
+          ← Back to job
+        </Link>
 
-        <div>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Description"
-          />
-        </div>
+        <section className="edit-job-card" aria-labelledby="edit-job-title">
+          <div className="edit-job-header">
+            <h1 id="edit-job-title">Edit Job</h1>
+            <p>Update the job details below.</p>
+          </div>
 
-        <div>
-          <input
-            type="text"
-            name="location"
-            value={formData.location}
-            onChange={handleChange}
-            placeholder="Location"
-          />
-        </div>
+          <form className="edit-job-form" onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="title">Job title</label>
+              <input
+                id="title"
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder="Title"
+                required
+              />
+            </div>
 
-        <div>
-          <input
-            type="text"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            placeholder="Category"
-          />
-        </div>
+            <div className="form-group">
+              <label htmlFor="description">Job description</label>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Description"
+                required
+              />
+            </div>
 
-        <div>
-          <input
-            type="number"
-            name="budget"
-            value={formData.budget}
-            onChange={handleChange}
-            placeholder="Budget"
-          />
-        </div>
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="location">Location</label>
+                <input
+                  id="location"
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  placeholder="Location"
+                  required
+                />
+              </div>
 
-        <button type="submit">Update Job</button>
-      </form>
-    </div>
+              <div className="form-group">
+                <label htmlFor="category">Category</label>
+                <input
+                  id="category"
+                  type="text"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  placeholder="Category"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="budget">Budget</label>
+                <input
+                  id="budget"
+                  type="number"
+                  name="budget"
+                  value={formData.budget}
+                  onChange={handleChange}
+                  placeholder="Budget"
+                  min="0"
+                  required
+                />
+              </div>
+            </div>
+
+            <button type="submit" disabled={updateJobMutation.isPending}>
+              {updateJobMutation.isPending ? 'Updating...' : 'Update Job'}
+            </button>
+          </form>
+        </section>
+      </div>
+    </main>
   );
 }
 

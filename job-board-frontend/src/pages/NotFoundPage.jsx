@@ -1,14 +1,26 @@
 import { Link } from 'react-router-dom';
+import StarsBackground from '../components/StarsBackground';
+import '../styles/notFound.css';
 
 function NotFoundPage() {
   return (
-    <div>
-      <h1>404</h1>
+    <main className="not-found-page">
+      <StarsBackground />
 
-      <p>Page not found.</p>
+      <section className="not-found-card">
+        <p className="error-code">404</p>
 
-      <Link to="/">Go back home</Link>
-    </div>
+        <h1>Page not found</h1>
+
+        <p className="not-found-text">
+          The page you are looking for does not exist or has been moved.
+        </p>
+
+        <Link className="home-link" to="/">
+          Go back home
+        </Link>
+      </section>
+    </main>
   );
 }
 

@@ -31,7 +31,13 @@ class JobApplicationsController < ApplicationController
             }, status: :forbidden
   end
 
-  render json: job.job_applications
+render json: job.job_applications.as_json(
+  include: {
+    user: {
+      only: [:id, :name, :email, :phone_number]
+    }
+  }
+)
 end
 
 def my_applications

@@ -13,6 +13,7 @@ function SignupPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone_number: '',
     password: '',
     password_confirmation: '',
     role: 'freelancer',
@@ -46,6 +47,7 @@ function SignupPage() {
     if (
       !formData.name.trim() ||
       !formData.email.trim() ||
+      !formData.phone_number.trim() ||
       !formData.password.trim() ||
       !formData.password_confirmation.trim()
     ) {
@@ -113,6 +115,21 @@ function SignupPage() {
               placeholder="Email"
               autoComplete="email"
               value={formData.email}
+              onChange={handleChange}
+              required
+              aria-required="true"
+            />
+          </div>
+          <div>
+            <label htmlFor="email">Phone number</label>
+
+            <input
+              id="email"
+              type="text"
+              name="phone_number"
+              placeholder="Phone number"
+              autoComplete="Phone number"
+              value={formData.phone_number}
               onChange={handleChange}
               required
               aria-required="true"

@@ -59,7 +59,11 @@ end
     head :no_content
  end
 def my_jobs
-  render json: current_user.jobs
+  jobs = current_user.jobs.includes(:job_applications)
+
+  render json: jobs.as_json(
+    methods: :applications_count
+  )
 end
 
     private

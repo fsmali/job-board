@@ -1,0 +1,176 @@
+.applicants-page {
+  position: relative;
+  min-height: calc(100vh - 70px);
+  padding: 24px 16px;
+  overflow: hidden;
+  background: #050816;
+}
+
+.applicants-content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.back-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.applicants-hero,
+.empty-card,
+.applicant-card {
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.applicants-hero {
+  padding: 24px;
+  text-align: center;
+}
+
+.applicants-hero h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.applicants-hero p {
+  color: #4b5563;
+}
+
+.applicants-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.applicant-card {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+}
+
+.applicant-header {
+  display: grid;
+  gap: 12px;
+}
+
+.applicant-header h2 {
+  font-size: 22px;
+}
+
+.application-status {
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #111827;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.application-message {
+  color: #1f2937;
+  line-height: 1.6;
+}
+
+.applicant-actions {
+  display: grid;
+  gap: 12px;
+}
+
+.accept-btn,
+.reject-btn,
+.empty-card a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.accept-btn {
+  background: #059669;
+}
+
+.reject-btn {
+  background: #991b1b;
+}
+
+.accept-btn:disabled,
+.reject-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.empty-card {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  text-align: center;
+}
+
+.empty-card a {
+  background: #4f46e5;
+}
+
+.page-message {
+  padding: 40px 16px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .applicants-page {
+    padding: 40px;
+  }
+
+  .applicants-hero {
+    padding: 32px;
+  }
+
+  .applicants-hero h1 {
+    font-size: 40px;
+  }
+
+  .applicants-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .applicant-header {
+    grid-template-columns: 1fr auto;
+    align-items: start;
+  }
+
+  .applicant-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.applicant-contact {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f3f4f6;
+}
+
+.applicant-contact p {
+  color: #111827;
+  line-height: 1.4;
+}
+
+@media (min-width: 1200px) {
+  .applicants-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
