@@ -91,6 +91,7 @@ const MyApplicationPage = () => {
                 <Link
                   className="details-link"
                   to={`/jobs/${application.job.id}`}
+                  state={{ from: '/my-applications' }}
                 >
                   View job details
                 </Link>

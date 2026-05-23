@@ -17,7 +17,11 @@ const JobCard = ({ user, job, alreadyApplied = false }) => {
       )}
 
       {user ? (
-        <Link className={styles.link} to={`/jobs/${job.id}`}>
+        <Link
+          className={styles.link}
+          to={`/jobs/${job.id}`}
+          state={{ from: '/' }}
+        >
           View details
         </Link>
       ) : (

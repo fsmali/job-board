@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/editJob.css';
-import { toast } from 'react-toastify';
 
 function EditJobPage() {
   const { id } = useParams();
@@ -67,17 +66,7 @@ function EditJobPage() {
       queryClient.invalidateQueries({ queryKey: ['job', id] });
       queryClient.invalidateQueries({ queryKey: ['my-jobs'] });
 
-      toast.success('Job updated successfully', {
-        autoClose: 1000,
-      });
-
-      setTimeout(() => {
-        navigate(`/jobs/${id}`);
-      }, 1000);
-    },
-
-    onError: () => {
-      toast.error('Could not update job');
+      navigate(`/jobs/${id}`);
     },
   });
 
@@ -98,60 +87,10 @@ function EditJobPage() {
       !formData.category.trim() ||
       !formData.budget
     ) {
-      toast.warning('Please fill out all fields');
       return;
     }
 
-    if (toast.isActive('edit-job-confirm')) return;
-
-    toast.info(
-      <div>
-        <p style={{ marginBottom: '12px' }}>Save changes to this job?</p>
-
-        <div
-          style={{
-            display: 'flex',
-            gap: '10px',
-          }}
-        >
-          <button
-            onClick={() => {
-              updateJobMutation.mutate(formData);
-              toast.dismiss('edit-job-confirm');
-            }}
-            style={{
-              padding: '8px 12px',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              background: '#4f46e5',
-              color: 'white',
-            }}
-          >
-            Save
-          </button>
-
-          <button
-            onClick={() => toast.dismiss('edit-job-confirm')}
-            style={{
-              padding: '8px 12px',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              background: '#374151',
-              color: 'white',
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>,
-      {
-        toastId: 'edit-job-confirm',
-        autoClose: false,
-        closeOnClick: false,
-      },
-    );
+    updateJobMutation.mutate(formData);
   };
 
   if (isLoading) return <h1 className="page-message">Loading job...</h1>;

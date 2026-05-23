@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/jobApplicants.css';
-import { toast } from 'react-toastify';
 
 function JobApplicantsPage() {
   const { id } = useParams();
@@ -63,76 +62,11 @@ function JobApplicantsPage() {
       return data;
     },
 
-    onSuccess: (_data, variables) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['job-applications', id] });
       queryClient.invalidateQueries({ queryKey: ['my-applications'] });
-
-      toast.success(
-        variables.status === 'accepted'
-          ? 'Applicant accepted'
-          : 'Applicant rejected',
-        { autoClose: 1000 },
-      );
-    },
-
-    onError: () => {
-      toast.error('Could not update applicant status');
     },
   });
-
-  const confirmStatusUpdate = ({ applicationId, status }) => {
-    const toastId = `${status}-application-${applicationId}`;
-
-    if (toast.isActive(toastId)) return;
-
-    toast.info(
-      <div>
-        <p style={{ marginBottom: '12px' }}>
-          {status === 'accepted'
-            ? 'Accept this applicant?'
-            : 'Reject this applicant?'}
-        </p>
-
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <button
-            onClick={() => {
-              updateStatusMutation.mutate({ applicationId, status });
-              toast.dismiss(toastId);
-            }}
-            style={{
-              padding: '8px 12px',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              background: status === 'accepted' ? '#059669' : '#991b1b',
-              color: 'white',
-            }}
-          >
-            {status === 'accepted' ? 'Accept' : 'Reject'}
-          </button>
-
-          <button
-            onClick={() => toast.dismiss(toastId)}
-            style={{
-              padding: '8px 12px',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              background: '#374151',
-              color: 'white',
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>,
-      {
-        toastId,
-        autoClose: false,
-        closeOnClick: false,
-      },
-    );
-  };
 
   if (isLoading) {
     return <h1 className="page-message">Loading applicants...</h1>;
@@ -194,7 +128,7 @@ function JobApplicantsPage() {
                     type="button"
                     disabled={updateStatusMutation.isPending}
                     onClick={() =>
-                      confirmStatusUpdate({
+                      updateStatusMutation.mutate({
                         applicationId: application.id,
                         status: 'accepted',
                       })
@@ -208,7 +142,7 @@ function JobApplicantsPage() {
                     type="button"
                     disabled={updateStatusMutation.isPending}
                     onClick={() =>
-                      confirmStatusUpdate({
+                      updateStatusMutation.mutate({
                         applicationId: application.id,
                         status: 'rejected',
                       })

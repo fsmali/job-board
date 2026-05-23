@@ -61,14 +61,13 @@ function MyJobsPage() {
       </main>
     );
   }
-  const isOwner = user?.role === 'employer' && user?.id === jobs.user_id;
 
   return (
     <main className="my-jobs-page" aria-labelledby="my-jobs-title">
       <StarsBackground />
 
       <div className="my-jobs-content">
-        <Link className="back-link" to={'/ '}>
+        <Link className="back-link" to={'/'}>
           ← Back
         </Link>
         <section className="my-jobs-hero">
@@ -107,7 +106,9 @@ function MyJobsPage() {
                         : 'No applicants yet'}
                     </strong>
                   </p>
-                  <Link to={`/jobs/${job.id}`}>Edit/Delete</Link>
+                  <Link to={`/jobs/${job.id}`} state={{ from: '/my-jobs' }}>
+                    Edit/Delete
+                  </Link>
 
                   <Link to={`/jobs/${job.id}/applicants`}>Applicants</Link>
                 </div>

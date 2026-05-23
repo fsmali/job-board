@@ -24,6 +24,16 @@
   z-index: 0;
   pointer-events: none;
 }
+.create-job-content {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  max-width: 420px;
+
+  display: grid;
+  gap: 16px;
+}
 
 .create-job-card h1 {
   margin-bottom: 20px;
