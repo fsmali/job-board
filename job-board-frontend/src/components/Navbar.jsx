@@ -22,6 +22,10 @@ function Navbar() {
       </div>
 
       <div className={styles.right} role="list" aria-label="Navigation links">
+        {token && user && (
+          <span className={styles.username}>Hello, {user.name}</span>
+        )}
+
         {token && user?.role === 'employer' && (
           <Link role="listitem" to="/create-job">
             Create Job

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useState } from 'react';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/jobDetails.css';
+import Swal from 'sweetalert2';
 
 function JobDetailsPage() {
   const { id } = useParams();
@@ -22,6 +23,7 @@ function JobDetailsPage() {
     queryKey: ['job', id],
     queryFn: async () => {
       const { data } = await axios.get(`http://localhost:3000/jobs/${id}`);
+      console.log(data);
       return data;
     },
   });
@@ -35,11 +37,27 @@ function JobDetailsPage() {
       });
     },
 
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
       queryClient.invalidateQueries({ queryKey: ['my-jobs'] });
 
+      await Swal.fire({
+        icon: 'success',
+        title: 'Deleted!',
+        text: 'The job has been deleted successfully.',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       navigate('/my-jobs');
+    },
+
+    onError: () => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Delete Failed',
+        text: 'Something went wrong while deleting the job.',
+      });
     },
   });
 
@@ -109,13 +127,20 @@ function JobDetailsPage() {
 
       <div className="job-details-content">
         <Link className="back-link" to={backTo}>
-          ← Back
+          {backTo === '/my-jobs' ? '← Back to My Jobs' : '← Back to Home'}
         </Link>
-
         <section className="job-details-card" aria-labelledby="job-title">
           <div className="job-details-header">
             <div>
               <h1 id="job-title">{job.title}</h1>
+              <p className="posted-date">
+                Posted{' '}
+                {new Date(job.created_at).toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+              </p>
             </div>
           </div>
 
@@ -151,7 +176,22 @@ function JobDetailsPage() {
                 type="button"
                 className="delete-btn"
                 disabled={deleteJobMutation.isPending}
-                onClick={() => deleteJobMutation.mutate()}
+                onClick={async () => {
+                  const result = await Swal.fire({
+                    title: 'Delete Job?',
+                    text: 'This action cannot be undone.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel',
+                  });
+
+                  if (result.isConfirmed) {
+                    deleteJobMutation.mutate();
+                  }
+                }}
               >
                 {deleteJobMutation.isPending ? 'Deleting...' : 'Delete Job'}
               </button>

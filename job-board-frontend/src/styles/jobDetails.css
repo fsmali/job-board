@@ -162,6 +162,12 @@
   padding: 40px 16px;
   text-align: center;
 }
+.posted-date {
+  margin-top: 6px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
 
 @media (min-width: 768px) {
   .job-details-page {

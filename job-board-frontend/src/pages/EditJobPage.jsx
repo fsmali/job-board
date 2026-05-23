@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/editJob.css';
+import Swal from 'sweetalert2';
 
 function EditJobPage() {
   const { id } = useParams();
@@ -61,12 +62,28 @@ function EditJobPage() {
       return data;
     },
 
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
       queryClient.invalidateQueries({ queryKey: ['job', id] });
       queryClient.invalidateQueries({ queryKey: ['my-jobs'] });
 
+      await Swal.fire({
+        icon: 'success',
+        title: 'Updated!',
+        text: 'Job updated successfully.',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       navigate(`/jobs/${id}`);
+    },
+
+    onError: () => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Update Failed',
+        text: 'Something went wrong while updating the job.',
+      });
     },
   });
 
@@ -77,7 +94,7 @@ function EditJobPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
@@ -87,12 +104,30 @@ function EditJobPage() {
       !formData.category.trim() ||
       !formData.budget
     ) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please fill in all fields.',
+      });
+
       return;
     }
 
-    updateJobMutation.mutate(formData);
-  };
+    const result = await Swal.fire({
+      title: 'Update Job?',
+      text: 'Do you want to save these changes?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, update it!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    });
 
+    if (result.isConfirmed) {
+      updateJobMutation.mutate(formData);
+    }
+  };
   if (isLoading) return <h1 className="page-message">Loading job...</h1>;
   if (isError) return <h1 className="page-message">Could not load job</h1>;
 

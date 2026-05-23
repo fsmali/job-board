@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/createJob.css';
 import StarsBackground from '../components/StarsBackground';
+import Swal from 'sweetalert2';
 
 function CreateJobPage() {
   const { token, user } = useAuth();
@@ -50,6 +51,12 @@ function CreateJobPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
 
+      Swal.fire({
+        icon: 'success',
+        title: 'Job Created!',
+        text: 'Your job has been published successfully.',
+      });
+
       setFormData({
         title: '',
         description: '',
@@ -58,7 +65,15 @@ function CreateJobPage() {
         budget: '',
       });
 
-      navigate('/');
+      navigate('/my-jobs');
+    },
+
+    onError: () => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Failed',
+        text: 'Could not create the job.',
+      });
     },
   });
 
@@ -69,7 +84,7 @@ function CreateJobPage() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
@@ -79,10 +94,29 @@ function CreateJobPage() {
       !formData.category.trim() ||
       !formData.budget
     ) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Fields',
+        text: 'Please fill in all fields.',
+      });
+
       return;
     }
 
-    createJobMutation.mutate(formData);
+    const result = await Swal.fire({
+      title: 'Create Job?',
+      text: 'Do you want to publish this job posting?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, create it!',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+    });
+
+    if (result.isConfirmed) {
+      createJobMutation.mutate(formData);
+    }
   };
 
   return (

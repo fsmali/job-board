@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/jobApplicants.css';
+import Swal from 'sweetalert2';
 
 function JobApplicantsPage() {
   const { id } = useParams();
@@ -62,9 +63,28 @@ function JobApplicantsPage() {
       return data;
     },
 
-    onSuccess: () => {
+    onSuccess: async (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['job-applications', id] });
       queryClient.invalidateQueries({ queryKey: ['my-applications'] });
+
+      await Swal.fire({
+        icon: 'success',
+        title: variables.status === 'accepted' ? 'Accepted!' : 'Rejected!',
+        text:
+          variables.status === 'accepted'
+            ? 'The applicant has been accepted.'
+            : 'The applicant has been rejected.',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    },
+
+    onError: () => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Update Failed',
+        text: 'Could not update the application status.',
+      });
     },
   });
 
@@ -101,7 +121,7 @@ function JobApplicantsPage() {
             {applications.map((application) => (
               <article className="applicant-card" key={application.id}>
                 <div className="applicant-header">
-                  <span className="application-status">
+                  <span className={`application-status ${application.status}`}>
                     {application.status}
                   </span>
                 </div>
@@ -127,12 +147,25 @@ function JobApplicantsPage() {
                     className="accept-btn"
                     type="button"
                     disabled={updateStatusMutation.isPending}
-                    onClick={() =>
-                      updateStatusMutation.mutate({
-                        applicationId: application.id,
-                        status: 'accepted',
-                      })
-                    }
+                    onClick={async () => {
+                      const result = await Swal.fire({
+                        title: 'Accept Applicant?',
+                        text: `Do you want to accept ${application.user.name}?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, accept',
+                        cancelButtonText: 'Cancel',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                      });
+
+                      if (result.isConfirmed) {
+                        updateStatusMutation.mutate({
+                          applicationId: application.id,
+                          status: 'accepted',
+                        });
+                      }
+                    }}
                   >
                     Accept
                   </button>
@@ -141,12 +174,25 @@ function JobApplicantsPage() {
                     className="reject-btn"
                     type="button"
                     disabled={updateStatusMutation.isPending}
-                    onClick={() =>
-                      updateStatusMutation.mutate({
-                        applicationId: application.id,
-                        status: 'rejected',
-                      })
-                    }
+                    onClick={async () => {
+                      const result = await Swal.fire({
+                        title: 'Reject Applicant?',
+                        text: `Do you want to reject ${application.user.name}?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, reject',
+                        cancelButtonText: 'Cancel',
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                      });
+
+                      if (result.isConfirmed) {
+                        updateStatusMutation.mutate({
+                          applicationId: application.id,
+                          status: 'rejected',
+                        });
+                      }
+                    }}
                   >
                     Reject
                   </button>

@@ -68,7 +68,7 @@ function MyJobsPage() {
 
       <div className="my-jobs-content">
         <Link className="back-link" to={'/'}>
-          ← Back
+          ← Back To Home
         </Link>
         <section className="my-jobs-hero">
           <h1 id="my-jobs-title">My Jobs</h1>
@@ -84,6 +84,14 @@ function MyJobsPage() {
             {jobs.map((job) => (
               <article className="my-job-item" key={job.id}>
                 <h2>{job.title}</h2>
+                <p className="posted-date">
+                  Posted{' '}
+                  {new Date(job.created_at).toLocaleDateString('en-GB', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                  })}
+                </p>
 
                 <p>
                   <strong>Location:</strong> {job.location}

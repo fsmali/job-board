@@ -42,6 +42,20 @@ const MyApplicationPage = () => {
     enabled: !!token && user?.role === 'freelancer',
   });
 
+  const total = applications.length;
+
+  const pending = applications.filter(
+    (application) => application.status === 'pending',
+  ).length;
+
+  const accepted = applications.filter(
+    (application) => application.status === 'accepted',
+  ).length;
+
+  const rejected = applications.filter(
+    (application) => application.status === 'rejected',
+  ).length;
+
   if (isLoading)
     return <h1 className="page-message">Loading applications...</h1>;
   if (isError)
@@ -56,9 +70,34 @@ const MyApplicationPage = () => {
         <Link className="back-link" to={isOwner ? '/my-jobs' : '/ '}>
           ← Back
         </Link>
+
         <section className="applications-hero">
           <h1>My Applications</h1>
           <p>Track the jobs you have applied for.</p>
+        </section>
+        <section
+          className="applications-stats"
+          aria-label="Application summary"
+        >
+          <div className="stat-card">
+            <span>Total</span>
+            <strong>{total}</strong>
+          </div>
+
+          <div className="stat-card pending">
+            <span>Pending</span>
+            <strong>{pending}</strong>
+          </div>
+
+          <div className="stat-card accepted">
+            <span>Accepted</span>
+            <strong>{accepted}</strong>
+          </div>
+
+          <div className="stat-card rejected">
+            <span>Rejected</span>
+            <strong>{rejected}</strong>
+          </div>
         </section>
 
         {applications.length === 0 ? (
@@ -79,7 +118,7 @@ const MyApplicationPage = () => {
                     <p>{application.job.location}</p>
                   </div>
 
-                  <span className="application-status">
+                  <span className={`application-status ${application.status}`}>
                     {application.status}
                   </span>
                 </div>
