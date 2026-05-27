@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './Navbar.module.css';
+import { IoMdHome } from 'react-icons/io';
 
 function Navbar() {
   const { user, token, setToken, setUser } = useAuth();
@@ -17,7 +18,7 @@ function Navbar() {
     <nav className={styles.navbar} aria-label="Main navigation">
       <div className={styles.left}>
         <Link to="/" className={styles.logo} aria-label="Job Board home">
-          Job Board
+          <IoMdHome className={styles.reactHomeIcon} />
         </Link>
       </div>
 

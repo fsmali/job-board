@@ -5,7 +5,9 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'));
+
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     const fetchCurrentUser = async () => {
       if (!token) return;

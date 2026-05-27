@@ -48,6 +48,16 @@
   outline: 3px solid #005fcc;
   outline-offset: 3px;
 }
+.reactHomeIcon {
+  font-size: 32px;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.reactHomeIcon:hover {
+  color: #4f46e5;
+  transform: scale(1.1);
+}
 
 /* Desktop */
 @media (min-width: 768px) {

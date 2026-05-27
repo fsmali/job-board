@@ -1,5 +1,9 @@
+# It handles user-related HTTP requests
 class UsersController < ApplicationController
+  # defines a controller It handles user-related HTTP requests
   def create
+    # User is Rails model. Usually connected to users table
+    #user_params defines in the private down.
     user = User.new(user_params)
 
     if user.save
@@ -16,9 +20,9 @@ class UsersController < ApplicationController
     render json: { error: "Unauthorized" }, status: :unauthorized
   end
 end
-
+# this method can only be used inside the class
   private
-
+# an internal helper method
   def user_params
     params.require(:user).permit(
   :name,

@@ -31,11 +31,15 @@ function CreateJobPage() {
     }
   }, [token, user, navigate]);
 
+  //useMutation CREATE / UPDATE / DELETE data
+
   const createJobMutation = useMutation({
+    //The parameter newJob exists  because mutationFn needs data to send to the server. newJob === formData
     mutationFn: async (newJob) => {
       const { data } = await axios.post(
         'http://localhost:3000/jobs',
         {
+          // in here we use job key as back end aspect job = current_user.jobs.new(job_params)
           job: newJob,
         },
         {
@@ -76,9 +80,10 @@ function CreateJobPage() {
       });
     },
   });
-
+  // This function runs every time an input changes.
   const handleChange = (e) => {
     setFormData({
+      // copies the existing object properties into a new object.
       ...formData,
       [e.target.name]: e.target.value,
     });

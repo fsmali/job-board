@@ -23,7 +23,7 @@ function JobDetailsPage() {
     queryKey: ['job', id],
     queryFn: async () => {
       const { data } = await axios.get(`http://localhost:3000/jobs/${id}`);
-      console.log(data);
+
       return data;
     },
   });
@@ -80,13 +80,29 @@ function JobDetailsPage() {
       return data;
     },
 
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
       queryClient.invalidateQueries({ queryKey: ['my-applications'] });
 
       setMessage('');
 
+      await Swal.fire({
+        icon: 'success',
+        title: 'Application Sent!',
+        text: 'Your application has been submitted successfully.',
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       navigate('/');
+    },
+
+    onError: () => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Application Failed',
+        text: 'Something went wrong while submitting your application.',
+      });
     },
   });
 

@@ -20,11 +20,10 @@ function LoginPage() {
         'http://localhost:3000/login',
         loginData,
       );
-      console.log(data);
+
       return data;
     },
     onSuccess: (data) => {
-      console.log(data);
       localStorage.setItem('token', data.token);
       setToken(data.token);
       setUser(data.user);

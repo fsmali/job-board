@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import JobCard from '../components/JobCard';
 import StarsBackground from '../components/StarsBackground';
@@ -19,6 +19,14 @@ function HomePage() {
     category: '',
     location: '',
   });
+
+  /*
+data is undefined during the initial render
+while the request is still loading.
+
+an empty array as a fallback so jobs.map()
+does not crash before the API response arrives.
+*/
 
   const {
     data: jobs = [],
@@ -44,6 +52,7 @@ function HomePage() {
       return data;
     },
   });
+  // Fetch the logged-in freelancer's applications
 
   const { data: myApplications = [] } = useQuery({
     queryKey: ['my-applications'],
@@ -59,6 +68,7 @@ function HomePage() {
 
       return data;
     },
+    // we use optional chaining that return undifiend instead of crashing app.
     enabled: !!token && user?.role === 'freelancer',
   });
 

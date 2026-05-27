@@ -82,6 +82,15 @@
 .role-option input {
   width: auto;
 }
+.password-hint {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: #6b7280;
+  list-style: none;
+}
+.password-hint li::first-letter {
+  text-transform: capitalize;
+}
 
 /* TABLET / DESKTOP */
 @media (min-width: 768px) {

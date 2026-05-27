@@ -33,6 +33,13 @@ function EditJobPage() {
     },
   });
 
+  /* 
+  The form state depends on async fetched data.
+  Since the data is not available during the initial render,
+  useEffect listens for changes to the job object
+  and populates the form once the fetch completes.
+  */
+
   useEffect(() => {
     if (job) {
       setFormData({
@@ -62,6 +69,7 @@ function EditJobPage() {
       return data;
     },
 
+    //This cached data is outdated. Fetch fresh data.
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
       queryClient.invalidateQueries({ queryKey: ['job', id] });

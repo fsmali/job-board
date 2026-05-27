@@ -29,6 +29,11 @@ function SignupPage() {
     onSuccess: () => {
       navigate('/login');
     },
+    onError: (error) => {
+      setFormError(
+        error.response?.data?.errors?.join(', ') || 'Could not create account',
+      );
+    },
   });
 
   const handleChange = (e) => {
@@ -52,6 +57,25 @@ function SignupPage() {
       !formData.password_confirmation.trim()
     ) {
       setFormError('All fields are required');
+      return;
+    }
+    const phoneRegex = /^[0-9+\s()-]+$/;
+
+    if (!phoneRegex.test(formData.phone_number)) {
+      setFormError('Please enter a valid phone number');
+      return;
+    }
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*.])/;
+
+    if (formData.password.length < 8) {
+      setPasswordError('Password must be at least 8 characters');
+      return;
+    }
+
+    if (!passwordRegex.test(formData.password)) {
+      setPasswordError(
+        'Password must contain uppercase, number and special character',
+      );
       return;
     }
 
@@ -79,12 +103,6 @@ function SignupPage() {
         {passwordError && (
           <div role="alert" aria-live="assertive">
             {passwordError}
-          </div>
-        )}
-
-        {signupMutation.isError && (
-          <div role="alert" aria-live="assertive">
-            Could not create account. Try another email.
           </div>
         )}
 
@@ -121,11 +139,11 @@ function SignupPage() {
             />
           </div>
           <div>
-            <label htmlFor="email">Phone number</label>
+            <label htmlFor="phone_number">Phone number</label>
 
             <input
-              id="email"
-              type="text"
+              id="phone_number"
+              type="tel"
               name="phone_number"
               placeholder="Phone number"
               autoComplete="Phone number"
@@ -150,6 +168,12 @@ function SignupPage() {
               required
               aria-required="true"
             />
+            <ul className="password-hint">
+              <li> Minimum 8 characters</li>
+              <li>one uppercase letter</li>
+              <li>one number</li>
+              <li>one number and one special character.</li>
+            </ul>
           </div>
 
           <div>
