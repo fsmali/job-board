@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/jobApplicants.css';
 import Swal from 'sweetalert2';
+import api from '../api/axios';
 
 function JobApplicantsPage() {
   const { id } = useParams();
@@ -31,14 +32,11 @@ function JobApplicantsPage() {
   } = useQuery({
     queryKey: ['job-applications', id],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `http://localhost:3000/jobs/${id}/job_applications`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const { data } = await api.get(`/jobs/${id}/job_applications`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       return data;
     },
@@ -46,8 +44,8 @@ function JobApplicantsPage() {
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ applicationId, status }) => {
-      const { data } = await axios.patch(
-        `http://localhost:3000/job_applications/${applicationId}`,
+      const { data } = await api.patch(
+        `/job_applications/${applicationId}`,
         {
           job_application: {
             status,

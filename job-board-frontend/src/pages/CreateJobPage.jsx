@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import '../styles/createJob.css';
 import StarsBackground from '../components/StarsBackground';
 import Swal from 'sweetalert2';
+import api from '../api/axios';
 
 function CreateJobPage() {
   const { token, user } = useAuth();
@@ -36,8 +37,8 @@ function CreateJobPage() {
   const createJobMutation = useMutation({
     //The parameter newJob exists  because mutationFn needs data to send to the server. newJob === formData
     mutationFn: async (newJob) => {
-      const { data } = await axios.post(
-        'http://localhost:3000/jobs',
+      const { data } = await api.post(
+        '/jobs',
         {
           // in here we use job key as back end aspect job = current_user.jobs.new(job_params)
           job: newJob,

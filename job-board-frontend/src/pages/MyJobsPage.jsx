@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useEffect } from 'react';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/myJobs.css';
+import api from '../api/axios';
 
 function MyJobsPage() {
   const { token, user } = useAuth();
@@ -30,7 +31,7 @@ function MyJobsPage() {
   } = useQuery({
     queryKey: ['my-jobs'],
     queryFn: async () => {
-      const { data } = await axios.get('http://localhost:3000/my-jobs', {
+      const { data } = await api.get('/my-jobs', {
         headers: {
           Authorization: `Bearer ${token}`,
         },

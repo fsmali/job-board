@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import JobCard from '../components/JobCard';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/home.css';
+import api from '../api/axios';
 
 function HomePage() {
   const { user, token } = useAuth();
@@ -45,7 +46,7 @@ does not crash before the API response arrives.
         params.location = search.location;
       }
 
-      const { data } = await axios.get('http://localhost:3000/jobs', {
+      const { data } = await api.get('/jobs', {
         params,
       });
 
@@ -57,14 +58,11 @@ does not crash before the API response arrives.
   const { data: myApplications = [] } = useQuery({
     queryKey: ['my-applications'],
     queryFn: async () => {
-      const { data } = await axios.get(
-        'http://localhost:3000/my-applications',
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const { data } = await api.get('/my-applications', {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       return data;
     },

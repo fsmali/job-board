@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/myApplications.css';
+import api from '../api/axios';
 
 const MyApplicationPage = () => {
   const { token, user } = useAuth();
@@ -28,14 +29,11 @@ const MyApplicationPage = () => {
   } = useQuery({
     queryKey: ['my-applications'],
     queryFn: async () => {
-      const { data } = await axios.get(
-        'http://localhost:3000/my-applications',
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const { data } = await api.get('/my-applications', {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       return data;
     },

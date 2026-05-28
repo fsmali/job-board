@@ -91,6 +91,31 @@
 .password-hint li::first-letter {
   text-transform: capitalize;
 }
+.error {
+  color: red;
+}
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 45px;
+}
+
+.password-input-wrapper {
+  position: relative;
+}
+
+.password-input-wrapper input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.password-toggle {
+  color: red;
+  background-color: red;
+}
 
 /* TABLET / DESKTOP */
 @media (min-width: 768px) {

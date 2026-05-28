@@ -4,8 +4,10 @@
 # - location: a string that indicates where the job is located.
 # - category: a string that categorizes the job (e.g., "Engineering", "
 class Job < ApplicationRecord
+  # Each job belongs to one employer.
     belongs_to :user
-    
+  # One job can have many applications.
+  # If the job is deleted, its applications are also deleted.
     has_many :job_applications, dependent: :destroy
      def applications_count
     job_applications.count

@@ -73,6 +73,7 @@
 .job-meta dd {
   margin-top: 4px;
   color: #111827;
+  text-transform: capitalize;
 }
 
 .job-description {

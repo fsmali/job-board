@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthBackground from '../components/AuthBackground';
+import api from '../api/axios';
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ function SignupPage() {
 
   const signupMutation = useMutation({
     mutationFn: async (newUser) => {
-      const { data } = await axios.post('http://localhost:3000/signup', {
+      const { data } = await api.post('/signup', {
         user: newUser,
       });
       return data;
@@ -95,13 +96,13 @@ function SignupPage() {
         <h1 id="signup-title">Create Account</h1>
 
         {formError && (
-          <div role="alert" aria-live="assertive">
+          <div className="error" role="alert" aria-live="assertive">
             {formError}
           </div>
         )}
 
         {passwordError && (
-          <div role="alert" aria-live="assertive">
+          <div className="error" role="alert" aria-live="assertive">
             {passwordError}
           </div>
         )}

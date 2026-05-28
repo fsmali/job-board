@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AuthBackground from '../components/AuthBackground';
+import api from '../api/axios';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -16,10 +17,7 @@ function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: async (loginData) => {
-      const { data } = await axios.post(
-        'http://localhost:3000/login',
-        loginData,
-      );
+      const { data } = await api.post('/login', loginData);
 
       return data;
     },
@@ -51,7 +49,7 @@ function LoginPage() {
         <h1 id="login-title">Login</h1>
 
         {loginMutation.isError && (
-          <div role="alert" aria-live="assertive">
+          <div className="error" role="alert" aria-live="assertive">
             Login failed. Please check your email and password.
           </div>
         )}

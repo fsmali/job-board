@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/editJob.css';
 import Swal from 'sweetalert2';
+import api from '../api/axios';
 
 function EditJobPage() {
   const { id } = useParams();
@@ -28,7 +29,7 @@ function EditJobPage() {
   } = useQuery({
     queryKey: ['job', id],
     queryFn: async () => {
-      const { data } = await axios.get(`http://localhost:3000/jobs/${id}`);
+      const { data } = await api.get(`/jobs/${id}`);
       return data;
     },
   });
@@ -54,8 +55,8 @@ function EditJobPage() {
 
   const updateJobMutation = useMutation({
     mutationFn: async (updatedJob) => {
-      const { data } = await axios.patch(
-        `http://localhost:3000/jobs/${id}`,
+      const { data } = await api.patch(
+        `/jobs/${id}`,
         {
           job: updatedJob,
         },

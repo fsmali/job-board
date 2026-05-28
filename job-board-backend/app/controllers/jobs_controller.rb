@@ -8,6 +8,7 @@ class JobsController < ApplicationController
  # jobs controller with an index action that retrieves all jobs from the database and returns them as JSON.
 
  # gets all jobs from the database.
+ # Also filters jobs by category or location.
 def index
   jobs = Job.all
 
@@ -27,13 +28,15 @@ def index
 
   render json: jobs
 end
-  # creates action for one job
+  # get a single job by id.
  def show
     # gets the job id from url
     job = Job.find(params[:id])
      # returns those jobs as JSON.
     render json: job
  end
+
+  
  def create
     # creates a new job with the parameters from the request body.
    job = current_user.jobs.new(job_params)

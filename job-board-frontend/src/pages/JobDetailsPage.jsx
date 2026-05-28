@@ -6,6 +6,7 @@ import { useState } from 'react';
 import StarsBackground from '../components/StarsBackground';
 import '../styles/jobDetails.css';
 import Swal from 'sweetalert2';
+import api from '../api/axios';
 
 function JobDetailsPage() {
   const { id } = useParams();
@@ -22,7 +23,7 @@ function JobDetailsPage() {
   } = useQuery({
     queryKey: ['job', id],
     queryFn: async () => {
-      const { data } = await axios.get(`http://localhost:3000/jobs/${id}`);
+      const { data } = await api.get(`/jobs/${id}`);
 
       return data;
     },
@@ -30,7 +31,7 @@ function JobDetailsPage() {
 
   const deleteJobMutation = useMutation({
     mutationFn: async () => {
-      await axios.delete(`http://localhost:3000/jobs/${id}`, {
+      await api.delete(`/jobs/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -63,8 +64,8 @@ function JobDetailsPage() {
 
   const applyMutation = useMutation({
     mutationFn: async () => {
-      const { data } = await axios.post(
-        `http://localhost:3000/jobs/${id}/job_applications`,
+      const { data } = await api.post(
+        `/jobs/${id}/job_applications`,
         {
           job_application: {
             message,
@@ -109,14 +110,11 @@ function JobDetailsPage() {
   const { data: myApplications = [] } = useQuery({
     queryKey: ['my-applications'],
     queryFn: async () => {
-      const { data } = await axios.get(
-        'http://localhost:3000/my-applications',
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const { data } = await api.get('/my-applications', {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       return data;
     },
