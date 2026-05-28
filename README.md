@@ -69,6 +69,12 @@ Authorization: BEARER eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.3EleBAcTxacNSr5-r0
 
 ---
 
+# Database ERD
+
+The application uses a relational database structure with one-to-many relationships between users, jobs, and job applications.
+
+![ERD Diagram](./images/erd.png)
+
 # API Routes
 
 ## Authentication
