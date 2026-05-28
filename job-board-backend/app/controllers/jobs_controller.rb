@@ -30,13 +30,13 @@ def index
 end
   # get a single job by id.
  def show
-    # gets the job id from url
+    # gets the job by id
     job = Job.find(params[:id])
      # returns those jobs as JSON.
     render json: job
  end
 
-  
+  # creates a job connected to the logged-in employer. 
  def create
     # creates a new job with the parameters from the request body.
    job = current_user.jobs.new(job_params)
@@ -79,6 +79,9 @@ end
     def record_not_found
         render json: { error: "Job not found" }, status: :not_found
     end 
+    # Checks if the current logged-in user owns the job.
+    # Prevents users from updating or deleting jobs
+    # created by other users.
     def authorize_owner!
   job = Job.find(params[:id])
 
@@ -86,6 +89,8 @@ end
     render json: { error: "Forbidden" }, status: :forbidden
   end
 end
+    # Checks if the current user has employer role.
+    # Prevents freelancers from creating jobs.
 def authorize_employer!
   unless current_user.role == "employer"
     render json: { error: "Only employers can create jobs" }, status: :forbidden
