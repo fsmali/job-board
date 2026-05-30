@@ -52,12 +52,18 @@ The frontend is built with React and connects to the Rails API backend using Axi
 # Frontend Tech Stack
 
 - React
+  https://react.dev/
 - React Router
+  https://reactrouter.com/home
 - TanStack React Query
+  https://tanstack.com/query/latest/docs/framework/react/overview
 - Axios
+  https://axios.rest/
 - SweetAlert2
+  https://sweetalert2.github.io/
 - CSS Modules / custom CSS
 - React Icons
+  https://react-icons.github.io/react-icons/
 
 ---
 
@@ -476,3 +482,5 @@ http://localhost:5173
 - Search optimization
 - File uploads
 - Email notifications
+- User profile pages
+- Instant messaging between employers and freelancers
