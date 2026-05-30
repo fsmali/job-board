@@ -1,11 +1,10 @@
-import axios from 'axios';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import StarsBackground from '../components/StarsBackground';
-import '../styles/myApplications.css';
 import api from '../api/axios';
+import '../styles/myApplications.css';
 
 const MyApplicationPage = () => {
   const { token, user } = useAuth();
@@ -27,7 +26,7 @@ const MyApplicationPage = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['my-applications'],
+    queryKey: ['my-applications', token],
     queryFn: async () => {
       const { data } = await api.get('/my-applications', {
         headers: {
@@ -37,35 +36,32 @@ const MyApplicationPage = () => {
 
       return data;
     },
-    enabled: !!token && user?.role === 'freelancer',
+    enabled: Boolean(token && user?.role === 'freelancer'),
   });
 
   const total = applications.length;
-
-  const pending = applications.filter(
-    (application) => application.status === 'pending',
-  ).length;
-
+  const pending = applications.filter((app) => app.status === 'pending').length;
   const accepted = applications.filter(
-    (application) => application.status === 'accepted',
+    (app) => app.status === 'accepted',
   ).length;
-
   const rejected = applications.filter(
-    (application) => application.status === 'rejected',
+    (app) => app.status === 'rejected',
   ).length;
 
-  if (isLoading)
+  if (isLoading) {
     return <h1 className="page-message">Loading applications...</h1>;
-  if (isError)
+  }
+
+  if (isError) {
     return <h1 className="page-message">Could not load applications</h1>;
-  const isOwner = user?.role === 'employer' && user?.id === job.user_id;
+  }
 
   return (
     <main className="applications-page">
       <StarsBackground />
 
       <div className="applications-content">
-        <Link className="back-link" to={isOwner ? '/my-jobs' : '/ '}>
+        <Link className="back-link" to="/">
           ← Back
         </Link>
 
@@ -73,6 +69,7 @@ const MyApplicationPage = () => {
           <h1>My Applications</h1>
           <p>Track the jobs you have applied for.</p>
         </section>
+
         <section
           className="applications-stats"
           aria-label="Application summary"
@@ -112,8 +109,8 @@ const MyApplicationPage = () => {
               <article className="application-card" key={application.id}>
                 <div className="application-header">
                   <div>
-                    <h2>{application.job.title}</h2>
-                    <p>{application.job.location}</p>
+                    <h2>{application.job?.title}</h2>
+                    <p>{application.job?.location}</p>
                   </div>
 
                   <span className={`application-status ${application.status}`}>
@@ -122,12 +119,12 @@ const MyApplicationPage = () => {
                 </div>
 
                 <p className="application-description">
-                  {application.job.description.slice(0, 100)}...
+                  {application.job?.description?.slice(0, 100)}...
                 </p>
 
                 <Link
                   className="details-link"
-                  to={`/jobs/${application.job.id}`}
+                  to={`/jobs/${application.job?.id}`}
                   state={{ from: '/my-applications' }}
                 >
                   View job details

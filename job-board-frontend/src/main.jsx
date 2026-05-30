@@ -9,8 +9,20 @@ import './styles/auth.css';
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')).render(
-  // This gives React Query to the whole app.
+  /*
+  QueryClientProvider for
+    fetching API data
+    caching data
+    mutations like create/update/delete
+  */
   // BrowserRouter enable client-side routing/navigation.
+
+  /* 
+  AuthProvider for
+  logged-in user
+  JWT token
+  role checking
+  */
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <AuthProvider>

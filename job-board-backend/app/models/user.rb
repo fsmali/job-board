@@ -2,7 +2,10 @@ class User < ApplicationRecord
     # password hashing, password confirmation support, password authentication.
   has_secure_password
 
+    # One user can have many jobs
   has_many :jobs
+  
+    # One user can have many applications
   has_many :job_applications
 
   validates :name, presence: true

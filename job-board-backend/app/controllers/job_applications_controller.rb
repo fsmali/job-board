@@ -1,9 +1,12 @@
 class JobApplicationsController < ApplicationController
-  before_action :authenticate_user!
 
+  # only logged user can apply job
+  before_action :authenticate_user!
+  # only freelancer can apply the  job
   before_action :authorize_freelancer!, only: [:create]
 
   def create
+    # Finds the job the freelancer is applying to.
     job = Job.find(params[:job_id])
 
     job_application = job.job_applications.new(
@@ -21,7 +24,7 @@ class JobApplicationsController < ApplicationController
       }, status: :unprocessable_entity
     end
   end
-  # find the job, checkownership, return application only to owner
+  # find the job, check ownership, return application only to owner
     def index
         job = Job.find(params[:job_id])
 

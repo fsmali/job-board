@@ -6,6 +6,10 @@ Rails.application.routes.draw do
 # creates a GET endpoint will trigger the controller..
 get "/health", to: "health#index"
 
+
+    # Route for user registration.
+    # Sends POST /signup requests
+    # to create action inside UsersController.
 post "/signup", to: "users#create"
 post "/login", to: "sessions#create"
 get "/my-applications", to: "job_applications#my_applications"

@@ -1,4 +1,4 @@
-// components/StarsBackground.jsx
+// components / StarsBackground.jsx;
 import { Canvas } from '@react-three/fiber';
 import { Stars } from '@react-three/drei';
 

@@ -1,10 +1,13 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+
 import api from '../api/axios';
 
 const AuthContext = createContext();
-
+// Children represents the wrapped components
+// (e.g. <App />) that will have access
+// to the authentication context.
 export function AuthProvider({ children }) {
+  // Keep user logged in after refresh
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   const [user, setUser] = useState(null);
@@ -14,6 +17,7 @@ export function AuthProvider({ children }) {
       if (!token) return;
 
       try {
+        //Who is currently logged in?
         const { data } = await api.get('/me', {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -31,6 +35,7 @@ export function AuthProvider({ children }) {
     };
 
     fetchCurrentUser();
+    //
   }, [token]);
 
   return (

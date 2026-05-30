@@ -74,7 +74,13 @@ end
     private
     # strong parameters to allow only the specified parameters to be used for creating a job.
     def job_params
-        params.require(:job).permit(:title, :description, :location, :category, :budget)
+        params.require(:job).permit(
+          :title,
+          :description,
+          :location,
+          :category,
+          :budget
+      )
     end
     def record_not_found
         render json: { error: "Job not found" }, status: :not_found

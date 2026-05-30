@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -21,6 +20,10 @@ function CreateJobPage() {
     budget: '',
   });
 
+  // Protects the page.
+  // Redirects unauthenticated users to login
+  // and prevents freelancers from accessing
+  // the create job page.
   useEffect(() => {
     if (!token) {
       navigate('/login');
@@ -40,7 +43,9 @@ function CreateJobPage() {
       const { data } = await api.post(
         '/jobs',
         {
-          // in here we use job key as back end aspect job = current_user.jobs.new(job_params)
+          // The backend expects the payload inside a "job" key
+          // because Rails uses params.require(:job) in job_params.
+          // newJob contains the formData submitted by the user.
           job: newJob,
         },
         {
@@ -54,6 +59,8 @@ function CreateJobPage() {
     },
 
     onSuccess: () => {
+      // Marks the jobs query as outdated and tells React Query
+      // to refetch the latest jobs from the backend.
       queryClient.invalidateQueries({ queryKey: ['jobs'] });
 
       Swal.fire({

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import AuthBackground from '../components/AuthBackground';
@@ -28,7 +27,11 @@ function SignupPage() {
       return data;
     },
     onSuccess: () => {
-      navigate('/login');
+      navigate('/login', {
+        state: {
+          email: formData.email,
+        },
+      });
     },
     onError: (error) => {
       setFormError(

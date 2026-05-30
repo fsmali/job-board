@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AuthBackground from '../components/AuthBackground';
 import api from '../api/axios';
+import { useLocation } from 'react-router-dom';
 
 function LoginPage() {
+  const location = useLocation();
   const [formData, setFormData] = useState({
-    email: '',
+    email: location.state?.email || '',
     password: '',
   });
 

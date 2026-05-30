@@ -1,12 +1,13 @@
-import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+
 import { useAuth } from '../context/AuthContext';
 import JobCard from '../components/JobCard';
 import StarsBackground from '../components/StarsBackground';
-import '../styles/home.css';
 import api from '../api/axios';
+
+import '../styles/home.css';
 
 function HomePage() {
   const { user, token } = useAuth();
@@ -21,14 +22,6 @@ function HomePage() {
     location: '',
   });
 
-  /*
-data is undefined during the initial render
-while the request is still loading.
-
-an empty array as a fallback so jobs.map()
-does not crash before the API response arrives.
-*/
-
   const {
     data: jobs = [],
     isLoading,
@@ -38,25 +31,22 @@ does not crash before the API response arrives.
     queryFn: async () => {
       const params = {};
 
-      if (search.category.trim() !== '') {
+      if (search.category) {
         params.category = search.category;
       }
 
-      if (search.location.trim() !== '') {
+      if (search.location) {
         params.location = search.location;
       }
 
-      const { data } = await api.get('/jobs', {
-        params,
-      });
+      const { data } = await api.get('/jobs', { params });
 
       return data;
     },
   });
-  // Fetch the logged-in freelancer's applications
 
   const { data: myApplications = [] } = useQuery({
-    queryKey: ['my-applications'],
+    queryKey: ['my-applications', token],
     queryFn: async () => {
       const { data } = await api.get('/my-applications', {
         headers: {
@@ -66,32 +56,36 @@ does not crash before the API response arrives.
 
       return data;
     },
-    // we use optional chaining that return undifiend instead of crashing app.
     enabled: !!token && user?.role === 'freelancer',
   });
 
   const handleChange = (e) => {
-    setInput({
-      ...input,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setInput((prevInput) => ({
+      ...prevInput,
+      [name]: value,
+    }));
   };
 
   const handleReset = () => {
-    setInput({
+    const emptyFilters = {
       category: '',
       location: '',
-    });
+    };
 
-    setSearch({
-      category: '',
-      location: '',
-    });
+    setInput(emptyFilters);
+    setSearch(emptyFilters);
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setSearch(input);
+
+    setSearch({
+      category: input.category.trim(),
+      location: input.location.trim(),
+    });
+
     setInput({
       category: '',
       location: '',
