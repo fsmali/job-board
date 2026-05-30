@@ -413,7 +413,7 @@ cd job-board
 # Backend Setup
 
 ```bash
-cd backend
+cd job-board-backend
 ```
 
 Install gems:
@@ -454,7 +454,7 @@ http://localhost:3000
 Open a new terminal:
 
 ```bash
-cd frontend
+cd job-board-frontend
 ```
 
 Install dependencies:
@@ -484,3 +484,4 @@ http://localhost:5173
 - Email notifications
 - User profile pages
 - Instant messaging between employers and freelancers
+- Consider Redux for larger-scale global state management

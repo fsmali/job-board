@@ -10,10 +10,12 @@ class ApplicationController < ActionController::API
             # This removes "Bearer" part. ["Bearer", "abc123"] token = "abc123"
             token = auth_header.split(" ").last
             # This verifies and decodes JWT. JWT is encrypted/signed using secret key. The backend uses same secret key to verify token is real.
-            decoded_token = JWT.decode(
-                token,
-                Rails.application.credentials.secret_key_base
-            )
+          decoded_token = JWT.decode(
+  token,
+  Rails.application.secret_key_base,
+  true,
+  { algorithm: "HS256" }
+)
             # Gets first element
             user_id = decoded_token[0]["user_id"]
             # Queries database 

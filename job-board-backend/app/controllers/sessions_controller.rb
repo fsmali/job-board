@@ -8,7 +8,11 @@ class SessionsController < ApplicationController
         # Frontend sends that token later to prove identity.
         if user && user.authenticate(params[:password])
             # JSON Web Token is a secure token format used for authentication.
-            token = JWT.encode({ user_id: user.id }, Rails.application.credentials.secret_key_base)
+            token = JWT.encode(
+  { user_id: user.id },
+  Rails.application.secret_key_base,
+  "HS256"
+)
                render json: {
         user: user,
         token: token

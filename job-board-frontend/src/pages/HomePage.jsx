@@ -23,12 +23,17 @@ function HomePage() {
   });
 
   const {
+
+    // instead of returning undefined that return empty array
     data: jobs = [],
     isLoading,
     isError,
   } = useQuery({
     queryKey: ['jobs', search.category, search.location],
     queryFn: async () => {
+      // Build query parameters dynamically.
+      // Only include category and location if the user
+      // has entered search values.
       const params = {};
 
       if (search.category) {
@@ -44,7 +49,8 @@ function HomePage() {
       return data;
     },
   });
-
+// destructure data and declare empty array as return
+// empty instead of undefined
   const { data: myApplications = [] } = useQuery({
     queryKey: ['my-applications', token],
     queryFn: async () => {
