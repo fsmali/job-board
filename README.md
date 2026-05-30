@@ -8,25 +8,99 @@ https://guides.rubyonrails.org/api_app.html
 
 ## Features
 
-* User registration and login
-* JWT authentication
-* Role-based authorization
-* Employers can create, update, and delete jobs
-* Freelancers can apply to jobs
-* Employers can review applications
-* Protected API routes
-* Strong parameter security
-* RESTful API architecture
+- User registration and login
+- JWT authentication
+- Role-based authorization
+- Employers can create, update, and delete jobs
+- Freelancers can apply to jobs
+- Employers can review applications
+- Protected API routes
+- Strong parameter security
+- RESTful API architecture
 
 ---
 
 # Tech Stack
 
-* Ruby on Rails API
-* SQLite
-* JWT Authentication
-* BCrypt
+- Ruby on Rails API
+- SQLite
+- JWT Authentication
+- BCrypt
 
+---
+
+# Frontend Overview
+
+The frontend is built with React and connects to the Rails API backend using Axios and React Query.
+
+## Frontend Features
+
+- React Router navigation
+- User signup and login pages
+- JWT token storage using `localStorage`
+- Global authentication state with `AuthContext`
+- Role-based navigation for employers and freelancers
+- Protected frontend pages
+- Job search by category and location
+- Employers can create, edit, and manage jobs
+- Freelancers can view and apply to jobs
+- Freelancers can track their application status
+- Employers can review applicants and update application status
+
+---
+
+# Frontend Tech Stack
+
+- React
+- React Router
+- TanStack React Query
+- Axios
+- SweetAlert2
+- CSS Modules / custom CSS
+- React Icons
+
+---
+
+# Frontend Architecture
+
+## Authentication Flow
+
+1. User logs in from the frontend
+2. Rails API returns a JWT token
+3. Token is saved in `localStorage`
+4. `AuthContext` stores the current user and token
+5. Protected pages check authentication and user role
+6. Axios sends the token in the `Authorization` header for protected API requests
+
+## React Query
+
+React Query is used for server state management.
+
+It handles:
+
+- Fetching jobs
+- Fetching current user applications
+- Fetching employer jobs
+- Creating and updating jobs
+- Updating application status
+- Refreshing cached data with `invalidateQueries`
+
+## Role-Based Pages
+
+### Employer
+
+- Create job
+- Edit job
+- View my jobs
+- View applicants
+- Accept or reject applications
+
+### Freelancer
+
+- Browse jobs
+- Apply to jobs
+- View my applications
+- Track application status
 
 ---
 
@@ -34,19 +108,19 @@ https://guides.rubyonrails.org/api_app.html
 
 ## Users
 
-* A user can be an employer or freelancer
-* One user can create many jobs
-* One user can create many job applications
+- A user can be an employer or freelancer
+- One user can create many jobs
+- One user can create many job applications
 
 ## Jobs
 
-* Each job belongs to one employer
-* One job can have many job applications
+- Each job belongs to one employer
+- One job can have many job applications
 
 ## Job Applications
 
-* Each application belongs to one job
-* Each application belongs to one freelancer
+- Each application belongs to one job
+- Each application belongs to one freelancer
 
 ---
 
@@ -294,30 +368,29 @@ Request body:
 }
 ```
 
-
 # Authorization Rules
 
 ## Employers
 
-* Can create jobs
-* Can update/delete their own jobs
-* Can view applications for their jobs
-* Can update application status
+- Can create jobs
+- Can update/delete their own jobs
+- Can view applications for their jobs
+- Can update application status
 
 ## Freelancers
 
-* Can apply to jobs
-* Can view their own applications
+- Can apply to jobs
+- Can view their own applications
 
 ---
 
 # Security
 
-* Password hashing with BCrypt
-* JWT authentication
-* Strong parameters
-* Protected routes
-* Ownership authorization checks
+- Password hashing with BCrypt
+- JWT authentication
+- Strong parameters
+- Protected routes
+- Ownership authorization checks
 
 # Clone Project
 
@@ -396,13 +469,10 @@ Frontend runs on:
 http://localhost:5173
 ```
 
-
-
-
 # Future Improvements
 
-* PostgreSQL deployment
-* Pagination
-* Search optimization
-* File uploads
-* Email notifications
+- PostgreSQL deployment
+- Pagination
+- Search optimization
+- File uploads
+- Email notifications
