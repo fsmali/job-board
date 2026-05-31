@@ -26,7 +26,7 @@ const JobCard = ({ user, job, alreadyApplied = false }) => {
         </Link>
       ) : (
         <Link className={styles.link} to="/login">
-          Login to apply
+          Login to View Details
         </Link>
       )}
     </article>
