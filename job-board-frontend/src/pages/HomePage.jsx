@@ -23,7 +23,6 @@ function HomePage() {
   });
 
   const {
-
     // instead of returning undefined that return empty array
     data: jobs = [],
     isLoading,
@@ -49,8 +48,8 @@ function HomePage() {
       return data;
     },
   });
-// destructure data and declare empty array as return
-// empty instead of undefined
+  // destructure data and declare empty array as return
+  // empty instead of undefined
   const { data: myApplications = [] } = useQuery({
     queryKey: ['my-applications', token],
     queryFn: async () => {
