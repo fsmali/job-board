@@ -23,16 +23,12 @@ function HomePage() {
   });
 
   const {
-    // instead of returning undefined that return empty array
     data: jobs = [],
     isLoading,
     isError,
   } = useQuery({
     queryKey: ['jobs', search.category, search.location],
     queryFn: async () => {
-      // Build query parameters dynamically.
-      // Only include category and location if the user
-      // has entered search values.
       const params = {};
 
       if (search.category) {
@@ -45,11 +41,18 @@ function HomePage() {
 
       const { data } = await api.get('/jobs', { params });
 
-      return data;
+      if (Array.isArray(data)) {
+        return data;
+      }
+
+      if (Array.isArray(data.jobs)) {
+        return data.jobs;
+      }
+
+      return [];
     },
   });
-  // destructure data and declare empty array as return
-  // empty instead of undefined
+
   const { data: myApplications = [] } = useQuery({
     queryKey: ['my-applications', token],
     queryFn: async () => {
@@ -59,7 +62,19 @@ function HomePage() {
         },
       });
 
-      return data;
+      if (Array.isArray(data)) {
+        return data;
+      }
+
+      if (Array.isArray(data.applications)) {
+        return data.applications;
+      }
+
+      if (Array.isArray(data.job_applications)) {
+        return data.job_applications;
+      }
+
+      return [];
     },
     enabled: !!token && user?.role === 'freelancer',
   });
