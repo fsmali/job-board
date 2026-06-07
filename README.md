@@ -6,6 +6,16 @@ For more information about Rails API-only applications:
 
 https://guides.rubyonrails.org/api_app.html
 
+## Live Demo
+
+Frontend (Netlify):
+
+https://jobboard-job.netlify.app/
+
+Backend API (Render):
+
+https://job-board-fhoy.onrender.com
+
 ## Features
 
 - User registration and login
@@ -23,7 +33,8 @@ https://guides.rubyonrails.org/api_app.html
 # Tech Stack
 
 - Ruby on Rails API
-- SQLite
+- SQLite(development)
+- PostgreSQL(production)
 - JWT Authentication
 - BCrypt
 
