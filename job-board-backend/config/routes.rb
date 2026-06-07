@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
 # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
+ get "/", to: proc { [200, { "Content-Type" => "application/json" }, [{ status: "ok" }.to_json]] }
 # creates a GET endpoint will trigger the controller..
 get "/health", to: "health#index"
 
